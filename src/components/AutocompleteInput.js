@@ -1,4 +1,5 @@
 import React from 'react'
+
 import "./AutocompleteInput.css"
 
 import WidgetSuggestion from './WidgetSuggestion.js'

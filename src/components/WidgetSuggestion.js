@@ -1,17 +1,19 @@
 import React, { Fragment } from 'react'
 
+import fuzzysort from 'fuzzysort'
+
 import "./WidgetSuggestion.css"
 
 function WidgetSuggestion(props) {
     const listWords = props.suggestionList.map((word, index) => {
-        let arr = word.split(props.searchTerm)
-        let term = arr.join(`<span>${props.searchTerm}</span>`)
-        return <li key={index} className={props.highlightIndex === index && "highlight" || ""}
+        let highlightTerm = fuzzysort.highlight(word, '<span>', '</span>')
+
+        return <li key={index} className={(props.highlightIndex === index && "highlight") || ""}
                     onClick={() => {
-                        props.setSearchTerm(word)
+                        props.setSearchTerm(word.target)
                         props.setShowSuggestion(false)
                     }}
-                   dangerouslySetInnerHTML={{__html: term}}
+                   dangerouslySetInnerHTML={{__html: highlightTerm}}
                 />
     })
 
