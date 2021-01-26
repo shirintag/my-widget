@@ -1,0 +1,25 @@
+.suggestion-container {
+    text-align: center;
+    max-height: 300px;
+    overflow-y: scroll;
+    margin: 20px auto;
+    list-style-type: none;
+    border-radius: 10px;
+    border: 1px solid whitesmoke;
+    padding: 10px 0;
+}
+
+li {
+    cursor: pointer;
+    list-style-type: none;
+    text-align: left;
+    padding: 8px 16px 8px 43px;
+}
+
+li:hover, .highlight {
+    background-color: whitesmoke;
+}
+
+span {
+    color: rgb(89, 33, 207);
+}
