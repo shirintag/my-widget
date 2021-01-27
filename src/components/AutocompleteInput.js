@@ -10,6 +10,7 @@ function AutocompleteInput(props) {
     const [suggestionList, setSuggestionList] = React.useState([])
     const [showSuggestion, setShowSuggestion] = React.useState(true)
     const [highlightIndex, setHighlightIndex] = React.useState(null)
+    const [movingUp, setMovingUp] = React.useState(false)
 
     const handleChange = event => {
         setSearchTerm(event.target.value)
@@ -18,20 +19,24 @@ function AutocompleteInput(props) {
     }
 
     const handleKey = (event) => {
-        if (event.key === 'ArrowUp'){
-            if (highlightIndex === null || highlightIndex === 0) {
+        if (event.key === 'ArrowUp') {
+            if (highlightIndex === null) {
                 setHighlightIndex( suggestionList.length - 1)
+            } else if (highlightIndex === 0) {
             } else {
                 setHighlightIndex(highlightIndex - 1)
             }
+            setMovingUp(true)
         } else if (event.key === 'ArrowDown') {
-            if (highlightIndex === null || highlightIndex >= suggestionList.length - 1) {
+            if (highlightIndex === null) {
                 setHighlightIndex( 0)
+            } else if (highlightIndex >= suggestionList.length - 1) {
             } else {
                 setHighlightIndex(highlightIndex + 1)
             }
+            setMovingUp(false)
         } else if (event.key === 'Enter') {
-            setSearchTerm(suggestionList[highlightIndex])
+            setSearchTerm(suggestionList[highlightIndex].target)
             setShowSuggestion(false)
             setHighlightIndex( null)
         }
@@ -55,7 +60,9 @@ function AutocompleteInput(props) {
                                                     searchTerm={searchTerm}
                                                     setSearchTerm={setSearchTerm}
                                                     setShowSuggestion={setShowSuggestion}
-                                                    suggestionList={suggestionList}/>
+                                                    suggestionList={suggestionList}
+                                                    movingUp={movingUp}
+                />
             }
         </div>
     )
