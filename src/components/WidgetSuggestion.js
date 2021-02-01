@@ -1,46 +1,43 @@
-import React, { Fragment, useRef, useEffect, useState } from 'react'
+import React, { Fragment, useRef } from 'react'
 
 import fuzzysort from 'fuzzysort'
 
 import "./WidgetSuggestion.css"
 
 function WidgetSuggestion(props) {
-    const myRef = useRef(null)
+    const highlightRef = useRef(null)
     const containerRef =  useRef(null)
 
-    const listWords = props.suggestionList.map((word, index) => {
-        let highlightTerm = fuzzysort.highlight(word, '<span>', '</span>')
+    const listWords = props.suggestionList.map((result, index) => {
+        // highlight the search term using fuzzySort library
+        let highlightTerm = fuzzysort.highlight(result, '<span>', '</span>')
         return <li key={index} className={(props.highlightIndex === index && "highlight") || ""}
-                   ref={props.highlightIndex === index && myRef || null}
+                   // reference the highlighted list element
+                   ref={(props.highlightIndex === index && highlightRef) || null}
                    onClick={() => {
-                       props.setSearchTerm(word.target)
-                       props.setShowSuggestion(false)
+                       props.setSearchTerm(result.target)
+                       props.setSuggestionList([])
                    }}
                    dangerouslySetInnerHTML={{__html: highlightTerm}}
                 />
     })
 
-    if (props.highlightIndex != null && myRef.current) {
-        let offset;
+    // scrolls on up and down key and calculate how much should it move
+    if (props.highlightIndex != null && highlightRef.current) {
+        let offset
         if (props.movingUp) {
-            offset = myRef.current.offsetTop - 100 - myRef.current.offsetHeight
+            offset = highlightRef.current.offsetTop - 100 - highlightRef.current.offsetHeight
         } else {
-            offset = myRef.current.offsetTop - 100
+            offset = highlightRef.current.offsetTop - 100
         }
         containerRef.current.scrollTo(0, offset)
     }
 
-    if (listWords.length > 0) {
-        return (
-            <ul className={'suggestion-container'} ref={containerRef}>
-                {listWords}
-            </ul>
-        )
-    } else {
-        return (
-            <Fragment></Fragment>
-        )
-    }
+    return (
+        <ul className={'suggestion-container'} ref={containerRef}>
+            {listWords}
+        </ul>
+    )
 }
 
 export default WidgetSuggestion
