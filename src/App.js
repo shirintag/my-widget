@@ -1,7 +1,7 @@
 import './App.css'
 import AutocompleteInput from './components/AutocompleteInput.js'
 
-import { data } from './utils'
+import data from './data'
 
 function App() {
   return (
